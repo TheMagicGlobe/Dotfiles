@@ -3,22 +3,42 @@ Universal Dotfiles I use across Linux installations
 
 
 # 1. Symlink your .zshrc
-if [ -f ~/.zshrc ] && [ ! -L ~/.zshrc ]; then mv ~/.zshrc ~/.zshrc.backup; echo "📦 Backed up .zshrc"; fi; rm -f ~/.zshrc; ln -s ~/dotfiles/.zshrc ~/.zshrc; echo "✅ Symlinked .zshrc!"
-
+``` bash
+if [ -f ~/.zshrc ] && [ ! -L ~/.zshrc ]; then
+    mv ~/.zshrc ~/.zshrc.backup
+    echo "📦 Backed up .zshrc"
+fi
+rm -f ~/.zshrc
+ln -s ~/dotfiles/.zshrc ~/.zshrc
+echo "✅ Symlinked .zshrc!"```
+```
 # 2. Setup the config directories
+
+``` bash
 mkdir -p ~/.config
+
+# Generate a timestamp for unique backups (e.g., 20260607_165812)
+TIMESTAMP=$(date +%Y%m%d_%H%M%S)
+
 for dir in nvim kitty; do
     SOURCE_DIR="$HOME/dotfiles/configs/$dir"
     TARGET_DIR="$HOME/.config/$dir"
 
-    # Back up if it exists and isn't a symlink
-    if [ -d "$TARGET_DIR" ] && [ ! -L "$TARGET_DIR" ]; then
-        echo "📦 Backing up existing $TARGET_DIR to ${TARGET_DIR}.backup"
-        mv "$TARGET_DIR" "${TARGET_DIR}.backup"
+    if [ ! -d "$SOURCE_DIR" ]; then
+        echo "⚠️  Warning: Source $SOURCE_DIR not found. Skipping $dir."
+        continue
     fi
-    
-    # Remove old symlinks/empty dirs and create the new one
+
+    if [ -d "$TARGET_DIR" ] && [ ! -L "$TARGET_DIR" ]; then
+        BACKUP_DIR="${TARGET_DIR}.backup_${TIMESTAMP}"
+        echo "📦 Backing up existing $dir config to $BACKUP_DIR"
+        mv "$TARGET_DIR" "$BACKUP_DIR"
+    fi
+
     rm -rf "$TARGET_DIR"
+
     ln -s "$SOURCE_DIR" "$TARGET_DIR"
     echo "✅ Symlinked $dir!"
 done
+```
+
