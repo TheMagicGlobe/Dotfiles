@@ -20,7 +20,7 @@ mkdir -p ~/.config
 TIMESTAMP=$(date +%Y%m%d_%H%M%S)
 
 for dir in nvim kitty; do
-    SOURCE_DIR="$HOME/dotfiles/$dir"
+    SOURCE_DIR="$HOME/Dotfiles/$dir"
     TARGET_DIR="$HOME/.config/$dir"
 
     if [ ! -d "$SOURCE_DIR" ]; then
