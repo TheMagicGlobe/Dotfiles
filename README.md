@@ -17,7 +17,6 @@ echo "✅ Symlinked .zshrc!"```
 ``` bash
 mkdir -p ~/.config
 
-# Generate a timestamp for unique backups (e.g., 20260607_165812)
 TIMESTAMP=$(date +%Y%m%d_%H%M%S)
 
 for dir in nvim kitty; do
